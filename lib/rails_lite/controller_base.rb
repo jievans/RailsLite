@@ -10,6 +10,7 @@ class ControllerBase
     @req, @res = req, res
     @already_rendered = []
     @response_built = []
+    @params = Params.new(req)
   end
 
   def session
