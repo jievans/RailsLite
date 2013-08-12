@@ -21,10 +21,19 @@ class MyController < ControllerBase
 #    session["count"] += 1
 #    render :counting_show
   end
+
+  def switch
+    redirect_to('http://www.google.com')
+  end
+
 end
 
+# server.mount_proc '/' do |req, res|
+#   MyController.new(req, res).go
+# end
+
 server.mount_proc '/' do |req, res|
-  MyController.new(req, res).go
+  MyController.new(req, res).render('show')
 end
 
 server.start
