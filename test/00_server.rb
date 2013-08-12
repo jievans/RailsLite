@@ -14,12 +14,12 @@ class MyController < ControllerBase
     render_content("hello world!", "text/html")
 
     # after you have template rendering, uncomment:
-#    render :show
+   # render :show
 
     # after you have sessions going, uncomment:
-#    session["count"] ||= 0
-#    session["count"] += 1
-#    render :counting_show
+   session["count"] ||= 0
+   session["count"] += 1
+   render :counting_show
   end
 
   def switch
@@ -28,12 +28,12 @@ class MyController < ControllerBase
 
 end
 
+server.mount_proc '/' do |req, res|
+  MyController.new(req, res).go
+end
+
 # server.mount_proc '/' do |req, res|
 #   MyController.new(req, res).go
 # end
-
-server.mount_proc '/' do |req, res|
-  MyController.new(req, res).render('show')
-end
 
 server.start
