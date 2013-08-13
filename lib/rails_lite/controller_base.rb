@@ -6,7 +6,7 @@ require_relative 'session'
 class ControllerBase
   attr_reader :params
 
-  def initialize(req, res, route_params)
+  def initialize(req, res, route_params = {})
     @req, @res = req, res
     @already_rendered = false
    # @response_built = []
@@ -22,6 +22,7 @@ class ControllerBase
   end
 
   def redirect_to(url)
+    raise "already rendered" if already_rendered?
     @res.status = '302'
     @res['location'] = url
     @already_rendered = true
@@ -29,6 +30,7 @@ class ControllerBase
   end
 
   def render_content(content, type)
+    raise "already rendered" if already_rendered?
     @res.content_type = type
     @res.body = content
     @already_rendered = true
@@ -50,3 +52,5 @@ class ControllerBase
     render name unless @already_rendered
   end
 end
+
+
