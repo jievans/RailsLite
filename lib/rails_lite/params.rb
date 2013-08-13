@@ -2,16 +2,21 @@ require 'uri'
 
 class Params
 
-  def initialize(req, route_params = nil)
+  def initialize(req, route_params)
+    @params = {}
+    @params.merge!(route_params)
+
     unless req.query_string.nil?
-      @params = parse_www_encoded_form(req.query_string)
-    else if !req.body.nil?
-      @params = parse_www_encoded_form(req.body)
-      end
+      @params.merge!(parse_www_encoded_form(req.query_string))
     end
+    unless req.body.nil?
+      @params.merge!(parse_www_encoded_form(req.body))
+    end
+
   end
 
   def [](key)
+    @params[key]
   end
 
   def to_s
@@ -25,26 +30,6 @@ class Params
     key_val_array.each do |pair|
       params_hash[pair.first] = pair.last
     end
-
-    p params_hash
-
-    ## valiant effort in my opinion --- but the hashes will override
-    # dimensioned_hash = {}
-#     params_hash.each do |key, value|
-#       dims_array = parse_key(key).reverse
-#       current_hash = {}
-#       dims_array.each_with_index do |key_dim, index|
-#         if index == 0
-#           current_hash = { key_dim => value }
-#         else
-#           current_hash = { key_dim => current_hash }
-#         end
-#       end
-#       puts "This is the current_hash: "
-#       p current_hash
-#       dimensioned_hash.merge!(current_hash)
-#     end
-
 
     dimensioned_hash = {}
     params_hash.each do |key, value|
